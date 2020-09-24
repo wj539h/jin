@@ -1,0 +1,28 @@
+public class T {
+  public <init>() : void
+   L0
+    LINENUMBER 3 L0
+    ALOAD 0: this
+    INVOKESPECIAL Object.<init> () : void
+    RETURN
+   L1
+    LOCALVARIABLE this T L0 L1 0
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  public static main(String[]) : void
+   L0
+    LINENUMBER 5 L0
+    NEW Object
+    DUP
+    INVOKESPECIAL Object.<init> () : void
+    ASTORE 1
+   L1
+    LINENUMBER 6 L1
+    RETURN
+   L2
+    LOCALVARIABLE args String[] L0 L2 0
+    LOCALVARIABLE ob Object L1 L2 1
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
