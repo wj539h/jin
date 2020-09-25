@@ -379,7 +379,7 @@ public class EudicOpt {
 					List<String> list = gson.fromJson(json, List.class);
 					if(list != null && !list.isEmpty() && StringUtils.isNotEmpty(list.get(3))) {
 						result = StringEscapeUtils.unescapeHtml4(list.get(3));
-						System.out.println(result);
+						//System.out.println(result);
 					}
 				}
 			}
@@ -411,7 +411,7 @@ public class EudicOpt {
 			}
 		}
 		response.close();
-		System.out.println(word+" --- pageStatus : "+result);
+		//System.out.println(word+" --- pageStatus : "+result);
 		return result;
 	}
 	
