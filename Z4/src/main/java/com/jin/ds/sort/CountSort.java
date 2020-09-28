@@ -18,7 +18,7 @@ public class CountSort extends AbstractSort {
 	int temp[] = {20,15,15,17,16,18,18,18,19,19,16,20};
 	CountSort as = new CountSort(randomArr);
 	as.setMin(15);as.setGap(5);
-	as.consolePrint();
+	as.sortAndConPrt();
 	//as.timeLogPrint();
     }
     
@@ -26,14 +26,14 @@ public class CountSort extends AbstractSort {
     protected void sort() {
 	int countArr[] = new int[gap+1];
 	for(int i=0;i<len;i++) {
-	    countArr[a[i]-15]++;
+	    countArr[arr[i]-15]++;
 	}
 	
 	int newN=0;
 	for(int i=0;i<countArr.length;i++) {//221322
 	    int v=i+min;
 	    while(countArr[i]-->0) {
-		a[newN++]=v;
+		arr[newN++]=v;
 	    }
 	}
     }
