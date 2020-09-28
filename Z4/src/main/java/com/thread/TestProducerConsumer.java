@@ -2,14 +2,53 @@ package com.thread;
 
 public class TestProducerConsumer {
 	public static void main(String[] agrs) {
-		SyncStack ss = new SyncStack();
+		/*SyncStack ss = new SyncStack();
 		Producer p = new Producer(ss);
 		ConSumer c = new ConSumer(ss);
 		new Thread(p).start();
-		new Thread(c).start();
-
+		new Thread(c).start();*/
+		
+		PCSingleClass t = new PCSingleClass();
+		new Thread(t).start();
+		new Thread(t).start();
 	}
 }
+
+class PCSingleClass implements Runnable {
+	char p_c = 'p';
+	int i = 0;
+	public void run() {
+		while (true) {
+			synchronized (this) {
+				if (i == 0 || p_c == 'p') {
+					p();
+				}
+				if (i == 3 || p_c == 'c') {
+					c();
+				}
+			}
+		}
+	}
+	public void p() {
+		System.out.println(Thread.currentThread().getName()+" 生产了 : "+(++i));
+		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+		if(i==3) {
+			p_c = 'c';
+			this.notify();
+			try {this.wait();} catch (InterruptedException e) {e.printStackTrace();}
+		}
+	}
+	public void c() {
+		System.out.println(Thread.currentThread().getName()+" 消费了 : "+i--);
+		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+		if(i==0) {
+			p_c = 'p';
+			this.notify();
+			try {this.wait();} catch (InterruptedException e) {e.printStackTrace();}
+		}
+	}
+}
+
 
 class Woto {
 
