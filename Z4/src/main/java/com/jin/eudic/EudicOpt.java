@@ -33,14 +33,14 @@ public class EudicOpt {
 	public static final String URL_CUSTOMIZE_INFO = "https://dict.eudic.net/dicts/CustomizeInfo";
 	public static final String URL_SET_NOTE = "https://dict.eudic.net/Dicts/SetNote";
 
-	public static final String FILE_DIR_CAT_LIST = "CVS/eudicCatList.txt";
-	public static final String FILE_DIR_CAT_WORD_LIST = "CVS/eudicCatWordList.txt";
+	public static final String FILE_DIR_CAT_LIST = "CVS1/eudicCatList.txt";
+	public static final String FILE_DIR_CAT_WORD_LIST = "CVS1/eudicCatWordList.txt";
 	public static final String STR_CRLF = "\r\n";
 	public static final String STR_UTF8 = "UTF-8";
 	public static final String STR_LINE_JOINNER = "||";
 	public static final String STR_LINE_SPLITTER = "\\|\\|";
 	public static final String STR_WORD_JOINNER = "!@#";
-
+	public static final String FILE_DIR_NOTE_TEMP = "CVS1/temp";
 	private Map<String, String> categoryMap = null;
 
 	private boolean loadAllCatFromWeb = false;
@@ -455,7 +455,7 @@ public class EudicOpt {
 	
 	public Map<String,String> loadWordNoteFromFile() {
 		Map<String,String> resultMap = new HashMap<String,String>();
-		File f = new File("CVS/temp");
+		File f = new File(FILE_DIR_NOTE_TEMP);
 		try {
 			if (f.exists()) {
 				List<String> list = FileUtils.readLines(f, STR_UTF8);
