@@ -1,1 +1,0 @@
-spring的模板方法+callback模式简单实现
