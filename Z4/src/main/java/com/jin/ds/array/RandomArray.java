@@ -4,24 +4,44 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-import com.jin.ds.TimeLogger;
+import com.jin.ds.TimerCallBack;
 
 public class RandomArray {
     public static void main(String[] args) throws IOException {
-	int max = 100;
-	TimeLogger tl = new TimeLogger();
-	tl.start();
+	int max = 1000000;
 	//int dupArr[] = genDupArr(max);
 	//int noDupArr[] = genNoDupArr(max);
 	 //int noDupArr[] = randomCommon(1, max, max-1);
 	//int noDupArr[] = randomArray(0, max - 1, max);
-	int noDupArr[] = randomArray(0, max - 1, max);
-	tl.stopAndPrint();
+	//int noDupArr[] = randomArray(0, max - 1, max);
+	TimerCallBack.timerPrint(TimeUnit.MICROSECONDS, new TimerCallBack() {
+	    public void doSomething() {
+		randomArray(0, max - 1, max);
+	    }
+	});
 	//System.out.println(Arrays.toString(noDupArr));
 	//check(noDupArr);
     }
+    
+    public static int[] genOrderedArr(int min, int max, int ascOrDesc) {
+	int len = max - min + 1;
 
+	int[] source = new int[len];
+	if(ascOrDesc == 0) {
+	    for (int i = min; i < min + len; i++) {
+		source[i - min] = i;
+	    }
+	} else {
+	    for (int i = min; i < min + len; i++) {
+		source[i - min] = max-i+min;
+	    }
+	}
+	
+	return source;
+    }
+    
     /**
                * 这个是生成重复的，只是分配空间，只是分配空间的时间
      * @param len
