@@ -1,7 +1,6 @@
 package com.jin.eudic;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -134,8 +133,7 @@ public class EudicOpt {
 				if (json.contains("Time-out")) {
 					return null;
 				}
-				System.out.println(++count + " 生词本 : " + categoryName + " --- " + response.getStatusLine() + " --- "
-						+ Thread.currentThread().getName());
+				System.out.println(++count + " 生词本 : " + categoryName + " --- " + response.getStatusLine());
 				if (entity != null) {
 					Gson gson = new Gson();
 					Map<String, List> map = gson.fromJson(json, Map.class);
@@ -346,7 +344,7 @@ public class EudicOpt {
 			Map<String, Object> jsonMap = new HashMap<String, Object>();
 			jsonMap.put("id", categoryMap.get(catName));
 			jsonMap.put("language", "en");
-			jsonMap.put("words", (ArrayList<String>) wordList);
+			jsonMap.put("words", (List<String>) wordList);
 			Gson gson = new Gson();
 			String json = gson.toJson(jsonMap);
 			CloseableHttpResponse response = EudicUtils.sendPostJson(URL_WORD, json);
@@ -399,7 +397,7 @@ public class EudicOpt {
 		if (statusCode == 200) {
 			LineNumberReader reader = new LineNumberReader(new InputStreamReader(response.getEntity().getContent()));
 			String line = null;
-			reader.skip(6000);
+			//reader.skip(6000);
 			while ((line = reader.readLine()) != null) {
 				if (line.contains("id=\"page-status\"")) {
 					int s = line.indexOf("QYN");
@@ -453,6 +451,33 @@ public class EudicOpt {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public Map<String,String> loadWordNoteFromFile() {
+		Map<String,String> resultMap = new HashMap<String,String>();
+		File f = new File("CVS/temp");
+		try {
+			if (f.exists()) {
+				List<String> list = FileUtils.readLines(f, STR_UTF8);
+				
+				String word = null,note=null;
+				for (String line : list) {
+					if(line.contains(STR_LINE_JOINNER)) {
+						if(word != null) word = null;
+						if(note != null) note = null;
+						String tempArr[] = line.split(STR_LINE_SPLITTER);
+						word = tempArr[0];
+						note = tempArr.length >1?tempArr[1]+STR_CRLF : StringUtils.EMPTY;
+					} else {
+						note +=line+STR_CRLF;
+						resultMap.put(word, note);
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return resultMap;
 	}
 
 	public void setLoadAllCatFromWeb(boolean loadAllCatFromWeb) {
