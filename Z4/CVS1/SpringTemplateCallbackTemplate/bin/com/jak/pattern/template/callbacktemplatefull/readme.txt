@@ -1,0 +1,1 @@
+spring的模板方法+callback模式实现，包括RowMapper,StatmentCallback,ResultSetExtractor接口
