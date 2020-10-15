@@ -1,7 +1,7 @@
 package com.jin.ds.recursive;
 
-public class Rotate {
-    public Rotate(int[] a) {
+public class RotateChar {
+    public RotateChar(int[] a) {
         this.a = a;
     }
 
@@ -9,7 +9,7 @@ public class Rotate {
 
     public static void main(String[] args) {
         int temp[] = {0, 1, 2};
-        Rotate r = new Rotate(temp);
+        RotateChar r = new RotateChar(temp);
         r.doRotate(temp.length - 1);
     }
 

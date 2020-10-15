@@ -1,17 +1,6 @@
 package com.jin.eudic;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,9 +12,15 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class EudicOpt {
+	public enum ResponseCode {SUCCESS, ERROR}
 	public static final String URL_CATEGORY_QUERY = "https://api.frdic.com/api/open/v1/studylist/category";
 	public static final String URL_WORD = "https://api.frdic.com/api/open/v1/studylist/words/";
 	public static final String URL_CAT_WORD_OPT = "http://my.eudic.net/StudyList/Edit";
@@ -452,7 +447,8 @@ public class EudicOpt {
 		}
 		return result;
 	}
-	
+
+	//将word和note从temp文件里面加载到Map, key是word, value是note
 	public Map<String,String> loadWordNoteFromFile() {
 		Map<String,String> resultMap = new HashMap<String,String>();
 		File f = new File(FILE_DIR_NOTE_TEMP);
@@ -478,6 +474,42 @@ public class EudicOpt {
 			e.printStackTrace();
 		}
 		return resultMap;
+	}
+
+	public enum WriteNoteType {
+		APPEND,REPLACE;
+	}
+
+	//加载temp文件的word和note,更新或替换note,然后把word加到cat里
+	public void addWordToCateAndImportNote(String catName, WriteNoteType wnt) {
+		Map<String,String> map = loadWordNoteFromFile();
+		List<String> wordList = new LinkedList<String>();
+		int n=0;
+		for (Map.Entry<String,String> me : map.entrySet()) {
+			String word = null;
+			if((word = me.getKey()) != null) {
+				wordList.add(word);
+				String noteToImport = null;
+				switch(wnt) {
+					case APPEND:
+						String oriNote = findNoteByWord(word);
+						String double_crlf = StringUtils.isEmpty(oriNote)?"":EudicOpt.STR_CRLF+EudicOpt.STR_CRLF;
+						noteToImport = oriNote+double_crlf+me.getValue();
+						break;
+					case REPLACE:
+						noteToImport = me.getValue();
+						break;
+					default:
+				}
+				String updateNoteResult = updateWordNote(me.getKey(), noteToImport);
+				System.out.println(++n+" -- "+me.getKey()+" -- "+updateNoteResult);
+			}
+		}
+		addWordToCat(catName, wordList);
+	}
+
+	public void addWordToCateAndImportNote(String catName) {
+		addWordToCateAndImportNote(catName, WriteNoteType.APPEND);
 	}
 
 	public void setLoadAllCatFromWeb(boolean loadAllCatFromWeb) {

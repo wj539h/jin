@@ -4,27 +4,24 @@ import com.jin.Const;
 
 import java.util.*;
 
-public class BinarySearchTree {
+public class RedBlackTree {
 
     public static void main(String[] args) {
-        BinarySearchTree bst = new BinarySearchTree();
-        bst.add(60);bst.add(40);bst.add(75);bst.add(30);bst.add(33);
-        bst.add(50);bst.add(42);bst.add(66);bst.add(80);bst.add(85);
-        bst.add(64);bst.add(72);bst.add(76);bst.add(84);bst.add(65);
-        bst.add(74);bst.add(77);//bt.add(78);bt.add(79);
-        //bt.add(90);bt.add(87);bt.add(93);bt.add(86);bt.add(59);
-        Const.pln(bst.find(42));
+        RedBlackTree rbt = new RedBlackTree();
+        rbt.add(20);rbt.add(22);rbt.add(27);rbt.add(30);rbt.add(33);
+        rbt.add(35);rbt.add(42);//rbt.add(66);rbt.add(80);rbt.add(85);
+        Const.pln(rbt.find(42));
         //bst.del(75);
-        bst.populateProp(bst.root,null,1);
+        rbt.populateProp(rbt.root,null,1);
         Const.pln(Const.half_sap+"traverse recursive"+Const.half_sap);
-        
+
         Const.p("preOrder : ");
-        bst.traverseRecur(bst.root, 0);Const.pln();
+        rbt.traverseRecur(rbt.root, 0);Const.pln();
         Const.p("inOrder : ");
-        bst.traverseRecur(bst.root, 1);Const.pln();
+        rbt.traverseRecur(rbt.root, 1);Const.pln();
         Const.p("postOrder : ");
-        bst.traverseRecur(bst.root, 2);Const.pln();
-        
+        rbt.traverseRecur(rbt.root, 2);Const.pln();
+
         Const.pln(Const.full_sap);
         /*Const.pln(half_sapa+"traverse non recursive"+half_sapa);
         Const.p("preOrder : ");
@@ -36,21 +33,22 @@ public class BinarySearchTree {
         Const.pln("-----------------------------------------------------------------------------");*/
 
         Const.pln(Const.full_sap);
-        bst.displayTree();
+        rbt.displayTree();
         Const.pln(Const.full_sap);
     }
 
-    public static class Node {
+    public static class RBNode {
         int d;
-        Node l;
-        Node r;
-        Node pa;
+        RBNode l;
+        RBNode r;
+        RBNode pa;
         int level; //root = 1
         int showPos; //此节点的位置
         int firstElePos; //每行第一个元素的位置
         int th; //当前行的第几个, l.th = pa.th*2 - 1, r.th = pa.th*2
+        byte rb = 'r';
 
-        Node(int d) {
+        RBNode(int d) {
             this.d = d;
         }
         @Override
@@ -59,15 +57,13 @@ public class BinarySearchTree {
         }
     }
 
-    protected Node root;
+    protected RBNode root;
     protected int maxLevel;
     public void add(int d) {
-        Node n = new Node(d);
-        Node ptr;
+        RBNode n = new RBNode(d);
+        RBNode ptr;
         if(root == null) {
-            //maxLevel = ++n.level;
             root = n;
-            //n.th = 1;
         } else {
             ptr = root;
             while(true) {
@@ -75,22 +71,14 @@ public class BinarySearchTree {
                     if(ptr.l != null) {
                         ptr = ptr.l;
                     } else {
-                        //n.pa = ptr;
                         ptr.l = n;
-                        //n.level = ptr.level+1;
-                        //if(n.level > maxLevel) maxLevel = n.level;
-                        //n.th=n.pa.th*2-1;
                         break;
                     }
                 } else {
                     if(ptr.r != null) {
                         ptr = ptr.r;
                     } else {
-                        //n.pa = ptr;
                         ptr.r = n;
-                        //n.level = ptr.level+1;
-                        //if(n.level > maxLevel) maxLevel = n.level;
-                        //n.th=n.pa.th*2;
                         break;
                     }
                 }
@@ -98,8 +86,8 @@ public class BinarySearchTree {
         }
     }
 
-    //设置Node的pa,th,level
-    public void populateProp(Node n, Node pa, int th) {
+    //设置RBNode的pa,th,level
+    public void populateProp(RBNode n, RBNode pa, int th) {
         if (n == null) {
             return;
         }
@@ -112,8 +100,8 @@ public class BinarySearchTree {
     }
 
     //查找
-    public Node find(int key) {
-        Node result = root;
+    public RBNode find(int key) {
+        RBNode result = root;
         while (result != null) {
             //for(;result != null;) {
             if (result.d == key) {
@@ -129,7 +117,7 @@ public class BinarySearchTree {
     }
 
     //遍历, 0先序,1中序,2后续
-    public void traverseRecur(Node n, int option) {
+    public void traverseRecur(RBNode n, int option) {
         if(n == null) {
             return;
         }
@@ -141,8 +129,8 @@ public class BinarySearchTree {
     }
 
     //先序中序非递归实现
-    public void traverseNoRecur(Node n, int option) {
-        Stack<Node> s = new Stack<>();
+    public void traverseNoRecur(RBNode n, int option) {
+        Stack<RBNode> s = new Stack<>();
         while(true) {
             if(n!=null) {
                 if(option == 0) Const.p(n);
@@ -157,8 +145,8 @@ public class BinarySearchTree {
         }
     }
     //后序非递归实现
-    public void traverseNoRecurPost(Node n) {
-        Stack<Node> s = new Stack<>();
+    public void traverseNoRecurPost(RBNode n) {
+        Stack<RBNode> s = new Stack<>();
         while(true) {
             if(n!=null) {
                 s.push(n);
@@ -178,11 +166,11 @@ public class BinarySearchTree {
         }
     }
 
-    //同一行上的所有Node,放到queue里
-    private Queue<Node> findNodesByLevel(int level) {
-        Queue<Node> queue = new LinkedList<Node>();
-        Node n = root;
-        Stack<Node> s = new Stack<>();
+    //同一行上的所有RBNode,放到queue里
+    private Queue<RBNode> findRBNodesByLevel(int level) {
+        Queue<RBNode> queue = new LinkedList<RBNode>();
+        RBNode n = root;
+        Stack<RBNode> s = new Stack<>();
         while(true) {
             if(n !=null && n.level==level) queue.offer(n);
             if(n!=null) {
@@ -210,14 +198,14 @@ public class BinarySearchTree {
         int mlp = calcMlp();
         List<Queue> list = new ArrayList<>();
         for (int i = 1; i<= maxLevel; i++) {
-            Queue<Node> queue = findNodesByLevel(i);
+            Queue<RBNode> queue = findRBNodesByLevel(i);
             int a = 1<<(maxLevel-i+2);
-            for (Node nd : queue) {
+            for (RBNode nd : queue) {
                 if(nd.pa == null) {
                     nd.showPos = mlp/2;
                     nd.firstElePos = nd.showPos;
                 } else {
-                    Node pa = nd.pa;
+                    RBNode pa = nd.pa;
                     nd.firstElePos = pa.firstElePos/2;
                     if(nd.th==1) {
                         nd.showPos = nd.firstElePos;
@@ -230,7 +218,7 @@ public class BinarySearchTree {
             Const.pln(i+" - ("+queue+")");
         }
 
-        for (Queue<Node> q : list) {
+        for (Queue<RBNode> q : list) {
             int fep = q.peek().firstElePos;
             int gap = 1<<(maxLevel-q.peek().level+2);
             for(int i=1;i<fep;i++) {
@@ -257,8 +245,8 @@ public class BinarySearchTree {
     //删除节点
     public void del(int d) {
         //先查找, pa是查找到节点的父节点
-        Node pa = null;
-        Node ptr = root;
+        RBNode pa = null;
+        RBNode ptr = root;
         boolean found = false;
         while (ptr != null) {
             if(d<ptr.d) {
@@ -300,18 +288,18 @@ public class BinarySearchTree {
     //节点的左右都有
 
     /**
-                                    60
-                    40                              75
-            30              50              66              80
-        **      33      42      **      64      72      76      85
+     60
+     40                              75
+     30              50              66              80
+     **      33      42      **      64      72      76      85
      **  **  **  **  **  **  **  **  **  65  **  74  **  77  84  **
      */
-    private void delCase3(Node n, Node pa) {
-    	Node succ = n.r;//先找到右边
-    	if(succ.l == null) {//右边没有左,那么这个右就是succ
+    private void delCase3(RBNode n, RBNode pa) {
+        RBNode succ = n.r;//先找到右边
+        if(succ.l == null) {//右边没有左,那么这个右就是succ
             succ.l = n.l;
         } else {
-    	    Node spa = null; //记录一下succ的pa
+            RBNode spa = null; //记录一下succ的pa
             while(succ.l != null) {//一直去找左,直到为空
                 spa = succ;
                 succ = succ.l;
@@ -323,15 +311,15 @@ public class BinarySearchTree {
             succ.l = n.l;
             succ.r = n.r;
         }
-    	if(pa!=null) { //如果删除的是75, 75的pa的l(比pa小)或r(比pa大)指向succ
+        if(pa!=null) { //如果删除的是75, 75的pa的l(比pa小)或r(比pa大)指向succ
             if (n.d < pa.d) {
                 pa.l = succ;
             } else {
                 pa.r = succ;
             }
         }
-    	if(n.d==root.d) {//删除root节点, 让root指向一下succ
-    	    root = succ;
+        if(n.d==root.d) {//删除root节点, 让root指向一下succ
+            root = succ;
         }
     }
 }
