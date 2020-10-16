@@ -1,11 +1,12 @@
 package com.jin.eudic;
 
 import com.jin.Const;
+import static com.jin.eudic.EudicConst.*;
 
 public class MainRunner {
 	public static void main(String[] args) throws Exception {
-		EudicReadOpt eo = new EudicReadOpt();
-		//EudicWriteOpt eo = new EudicWriteOpt();
+		//EudicReadOpt eo = new EudicReadOpt();
+		EudicWriteOpt eo = new EudicWriteOpt();
 		//eo.setLoadAllCatFromWeb(false);
 		//eo.setWriteCatListFile(true);
 		//eo.setWriteCatWordListFile(true);
@@ -13,7 +14,9 @@ public class MainRunner {
 		//查询某一个单词的note
 		String word = "practical";
 		String note = eo.findNoteByWord(word);
+		note = note.replace(CR, CRLF);
 		Const.pln(note);
+
 		//更新一个单词的note
 		/*note+="hahaha";
 		Const.pln(eo.updateWordNote(word, note));*/

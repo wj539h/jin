@@ -29,7 +29,7 @@ public class EudicWriteOpt extends EudicOpt {
         try {
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == 200) {
-                result = EntityUtils.toString(response.getEntity(), STR_UTF8);
+                result = EntityUtils.toString(response.getEntity(), UTF8);
             }
             if (statusCode == 200 && StringUtils.isEmpty(result)) {
                 result = response.getStatusLine().toString();
@@ -58,7 +58,7 @@ public class EudicWriteOpt extends EudicOpt {
             try {
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == 201) {
-                    result = EntityUtils.toString(response.getEntity(), STR_UTF8);
+                    result = EntityUtils.toString(response.getEntity(), UTF8);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -79,7 +79,7 @@ public class EudicWriteOpt extends EudicOpt {
             paramList.add(new BasicNameValuePair("catename", catName));
             paramList.add(new BasicNameValuePair("oldcateid", categoryMap.get(catName)));
             paramList.add(new BasicNameValuePair("oper", "del"));
-            String wordsStr = String.join(STR_WORD_JOINNER,
+            String wordsStr = String.join(WORD_JOINNER,
                     wordList.stream().map(String::valueOf).collect(Collectors.toList()));
             paramList.add(new BasicNameValuePair("uuid", wordsStr));
             result = callCommonPost(URL_CAT_WORD_OPT,paramList);
@@ -99,7 +99,7 @@ public class EudicWriteOpt extends EudicOpt {
             paramList.add(new BasicNameValuePair("catename", categoryMap.get(newCatName)));
             paramList.add(new BasicNameValuePair("oldcateid", categoryMap.get(oldCatName)));
             paramList.add(new BasicNameValuePair("oper", "moveword"));
-            String wordsStr = String.join(STR_WORD_JOINNER,
+            String wordsStr = String.join(WORD_JOINNER,
                     wordList.stream().map(String::valueOf).collect(Collectors.toList()));
             paramList.add(new BasicNameValuePair("uuid", wordsStr));
             result = callCommonPost(URL_CAT_WORD_OPT,paramList);
@@ -121,7 +121,7 @@ public class EudicWriteOpt extends EudicOpt {
                 switch(wnt) {
                     case APPEND:
                         String oriNote = findNoteByWord(word);
-                        String double_crlf = StringUtils.isEmpty(oriNote)?"":STR_CRLF+STR_CRLF;
+                        String double_crlf = StringUtils.isEmpty(oriNote)?"": CRLF + CRLF;
                         noteToImport = oriNote+double_crlf+me.getValue();
                         break;
                     case REPLACE:
