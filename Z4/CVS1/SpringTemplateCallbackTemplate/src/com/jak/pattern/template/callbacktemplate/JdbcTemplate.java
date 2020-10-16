@@ -1,10 +1,10 @@
 package com.jak.pattern.template.callbacktemplate;
 
+import com.jak.pattern.template.HsqldbUtil;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.jak.pattern.template.HsqldbUtil;
 
 /**   
   * @project: java.util

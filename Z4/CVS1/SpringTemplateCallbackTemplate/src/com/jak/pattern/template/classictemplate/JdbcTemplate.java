@@ -1,11 +1,11 @@
 package com.jak.pattern.template.classictemplate;
 
+import com.jak.pattern.template.HsqldbUtil;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.jak.pattern.template.HsqldbUtil;
 
 
 /**   

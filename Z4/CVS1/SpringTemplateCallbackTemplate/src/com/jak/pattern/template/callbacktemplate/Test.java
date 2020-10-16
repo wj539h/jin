@@ -1,11 +1,12 @@
 package com.jak.pattern.template.callbacktemplate;
 
+import com.jak.pattern.template.User;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import com.jak.pattern.template.User;
 
 
 
@@ -19,7 +20,7 @@ import com.jak.pattern.template.User;
  */
 public class Test {
 	
-	//内部类方式
+	//锟节诧拷锟洁方式
 	public Object query(final String sql) throws SQLException {
 		class QueryStatementCallback implements StatementCallback {
 
@@ -47,7 +48,7 @@ public class Test {
 		return jt.query(new QueryStatementCallback());
 	}
 
-	//匿名类方式
+	//锟斤拷锟斤拷锟洁方式
 	public Object query2(final String sql) throws Exception{
 		
 		JdbcTemplate jt = new JdbcTemplate();

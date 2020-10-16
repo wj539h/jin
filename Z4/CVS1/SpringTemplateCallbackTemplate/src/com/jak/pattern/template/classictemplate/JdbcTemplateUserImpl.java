@@ -1,11 +1,11 @@
 package com.jak.pattern.template.classictemplate;
 
+import com.jak.pattern.template.User;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jak.pattern.template.User;
 
 
 /**   
