@@ -112,10 +112,10 @@ public class EudicReadOpt extends EudicOpt{
         File f = new File(FILE_DIR_CAT_WORD_LIST);
         try {
             if (f.exists()) {
-                List<String> l = FileUtils.readLines(f, STR_UTF8);
+                List<String> l = FileUtils.readLines(f, UTF8);
                 for (String line : l) {
                     if (line.contains(word)) {
-                        String tempArr[] = line.split(STR_LINE_SPLITTER);
+                        String tempArr[] = line.split(LINE_SPLITTER);
                         result.add(tempArr[0]);
                     }
                 }

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.jin.eudic.EudicConst.*;
@@ -36,7 +35,7 @@ public class EudicOpt {
 	protected boolean writeCatWordListFile = false;
 
 	public EudicOpt() {
-		logger.setLevel(Level.SEVERE);
+		//logger.setLevel(Level.SEVERE);
 	}
 
 	protected void init() {
@@ -82,11 +81,11 @@ public class EudicOpt {
 		File f = new File(FILE_DIR_CAT_LIST);
 		try {
 			if (f.exists()) {
-				List<String> l = FileUtils.readLines(f, STR_UTF8);
+				List<String> l = FileUtils.readLines(f, UTF8);
 				for (String line : l) {
 					if (result == null)
 						result = new HashMap<String, String>();
-					String tempArr[] = line.split(STR_LINE_SPLITTER);
+					String tempArr[] = line.split(LINE_SPLITTER);
 					result.put(tempArr[0], tempArr[1]);
 				}
 				logger.info(result.toString());
@@ -105,7 +104,7 @@ public class EudicOpt {
 			boolean createOrDelE = f.exists() ? f.delete() : f.createNewFile();
 			if (!catMap.isEmpty()) {
 				for (Map.Entry<String, String> me : catMap.entrySet()) {
-					FileUtils.write(f, me.getKey() + STR_LINE_JOINNER + me.getValue() + STR_CRLF, STR_UTF8, true);
+					FileUtils.write(f, me.getKey() + LINE_JOINNER + me.getValue() + CRLF, UTF8, true);
 				}
 			}
 		} catch (IOException e) {
@@ -121,7 +120,7 @@ public class EudicOpt {
 			boolean createOrDelE = f.exists() ? f.delete() : f.createNewFile();
 			if (!catWordMap.isEmpty()) {
 				for (Map.Entry<String, List<String>> me : catWordMap.entrySet()) {
-					FileUtils.write(f, me.getKey() + STR_LINE_JOINNER + me.getValue() + STR_CRLF, STR_UTF8, true);
+					FileUtils.write(f, me.getKey() + LINE_JOINNER + me.getValue() + CRLF, UTF8, true);
 				}
 			}
 		} catch (IOException e) {
@@ -142,7 +141,7 @@ public class EudicOpt {
 		try {
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode == 200) {
-				result = EntityUtils.toString(response.getEntity(), STR_UTF8);
+				result = EntityUtils.toString(response.getEntity(), UTF8);
 			}
 			if (statusCode == 200 && StringUtils.isEmpty(result)) {
 				result = response.getStatusLine().toString();
@@ -176,18 +175,18 @@ public class EudicOpt {
 		File f = new File(FILE_DIR_NOTE_TEMP);
 		try {
 			if (f.exists()) {
-				List<String> list = FileUtils.readLines(f, STR_UTF8);
+				List<String> list = FileUtils.readLines(f, UTF8);
 
 				String word = null,note=null;
 				for (String line : list) {
-					if(line.contains(STR_LINE_JOINNER)) {
+					if(line.contains(LINE_JOINNER)) {
 						if(word != null) word = null;
 						if(note != null) note = null;
-						String tempArr[] = line.split(STR_LINE_SPLITTER);
+						String tempArr[] = line.split(LINE_SPLITTER);
 						word = tempArr[0];
-						note = tempArr.length >1?tempArr[1]+STR_CRLF : StringUtils.EMPTY;
+						note = tempArr.length >1?tempArr[1]+ CRLF : StringUtils.EMPTY;
 					} else {
-						note +=line+STR_CRLF;
+						note +=line+ CRLF;
 						resultMap.put(word, note);
 					}
 				}
@@ -209,7 +208,7 @@ public class EudicOpt {
 				CloseableHttpResponse response = EudicUtils.sendGet(URL_CUSTOMIZE_INFO, params);
 				int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode == 200) {
-					String json = EntityUtils.toString(response.getEntity(), STR_UTF8);
+					String json = EntityUtils.toString(response.getEntity(), UTF8);
 					Gson gson = new Gson();
 					List<String> list = gson.fromJson(json, List.class);
 					if(list != null && !list.isEmpty() && StringUtils.isNotEmpty(list.get(3))) {
