@@ -1,12 +1,5 @@
 package com.jin.eudic;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -21,6 +14,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class EudicUtils {
 	public static final String HEADER_NAME_AUTH = "Authorization";
 	public static final String HEADER_VALUE_AUTH = "NIS co/2bshIC2EPiKS6zd13L5piJTH3xPI4bujrOW2ytNAsYiivVuaShQ==";
@@ -28,7 +28,6 @@ public class EudicUtils {
 	public static final String HEADER_VALUE_CONTENT_TYPE = "application/json;charset=utf8";
 	public static final String USER_NAME_COOKIES = "Cookie";
 	public static final String USER_VALUE_COOKIES = "__cfduid=d1c94c633bef9af71e7205da1751ed7fe1600398268; __utma=131758875.1734058640.1600398321.1600398321.1600398321.1; __utmc=131758875; __utmz=131758875.1600398321.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); EudicWebSession=QYNeyJoYXNfb2xkX3Bhc3N3b3JkIjpmYWxzZSwidG9rZW4iOiIrU3JsOHd2QUJvRTNacHl3V0JtRTc1Y1g3SDg9IiwiZXhwaXJlaW4iOjEzMTQwMDAsInVzZXJpZCI6ImFjZTczNDVlLTIzOTYtMTFlYS04M2U4LWQ0NzhlMTc4OWM1NiIsInVzZXJuYW1lIjoid2o1MzloQGhvdG1haWwuY29tIiwiY3JlYXRpb25fZGF0ZSI6IjIwMTktMTItMjBUMTg6MDc6NDVaIiwicm9sZXMiOm51bGwsIm9wZW5pZF90eXBlIjpudWxsLCJvcGVuaWRfZGVzYyI6bnVsbCwicHJvZmlsZSI6eyJuaWNrbmFtZSI6IndqNTM5aCIsImVtYWlsIjoid2o1MzloQGhvdG1haWwuY29tIiwiZ2VuZGVyIjpudWxsLCJwYXNzd29yZCI6bnVsbCwidm9jYWJ1bGFyaWVzIjp7fX0sInJlZGlyZWN0X3VybCI6bnVsbH0%3d; __gads=ID=71d812375b515162:T=1600398498:S=ALNI_MYfKYwWDlrRAVuXBK8CR6Z7mGqWrw; ASP.NET_SessionId=mhckvdg0tsy2ro5fki2llz2y; col_index=2; col_sort=asc";
-
 	public static CloseableHttpResponse sendGet(String url, List<NameValuePair> params) {
 		// CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
