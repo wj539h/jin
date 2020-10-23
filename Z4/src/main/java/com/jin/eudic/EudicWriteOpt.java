@@ -45,7 +45,7 @@ public class EudicWriteOpt extends EudicOpt {
     //把word添加入cat
     public String addWordToCat(String catName, List<String> wordList) {
         String result = null;
-        if (!categoryMap.containsKey(catName)) {
+        if (!super.categoryMap.containsKey(catName)) {
             result = "{\"msg\":\" " + catName + " 不存在\",\"result\":false}";
         } else {
             Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -66,6 +66,7 @@ public class EudicWriteOpt extends EudicOpt {
                 e.printStackTrace();
             }
         }
+        logger.info(result.toString());
         return result;
     }
 
@@ -121,8 +122,11 @@ public class EudicWriteOpt extends EudicOpt {
                 switch(wnt) {
                     case APPEND:
                         String oriNote = findNoteByWord(word);
-                        String double_crlf = StringUtils.isEmpty(oriNote)?"": CRLF + CRLF;
-                        noteToImport = oriNote+double_crlf+me.getValue();
+                        if(StringUtils.isEmpty(oriNote)) {
+                            noteToImport = me.getValue();
+                        } else {
+                            noteToImport = oriNote+CRLF+CRLF+me.getValue();
+                        }
                         break;
                     case REPLACE:
                         noteToImport = me.getValue();

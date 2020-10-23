@@ -17,7 +17,6 @@ import java.util.*;
 import static com.jin.eudic.EudicConst.*;
 
 public class EudicReadOpt extends EudicOpt{
-
     //查询cat下面所有单词和note
     public Map<String,String> findWordsAndNoteByCat(String catName) {
         Map<String,String> resultMap = new HashMap<String,String>();
@@ -26,9 +25,14 @@ public class EudicReadOpt extends EudicOpt{
             resultMap.put("result", "false");
         } else {
             List<String> wordList = findWordsInCategory(catName);
-            for(String word : wordList) {
-                String note = findNoteByWord(word);
-                resultMap.put(word, note);
+            if(wordList == null || wordList.isEmpty()) {
+                resultMap.put("msg", catName + "中还没有单词");
+                resultMap.put("result", "false");
+            } else {
+                for(String word : wordList) {
+                    String note = findNoteByWord(word);
+                    resultMap.put(word, note);
+                }
             }
         }
         return resultMap;
