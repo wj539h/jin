@@ -1,8 +1,7 @@
 package com.jin;
 
-import cn.hutool.core.io.file.FileReader;
-
-import static com.jin.eudic.EudicConst.FILE_DIR_CAT_LIST;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Const {
     public static final String full_sap = "-----------------------------------------------------------------------------";
@@ -11,10 +10,16 @@ public class Const {
     public static void pln(Object content){System.out.println(content);}
     public static void p(Object content){System.out.print(content);}
 
-    public static void main(String[] args) {
-        FileReader fileReader = new FileReader("D:\\idea_workspace\\jin\\Z4\\"+FILE_DIR_CAT_LIST);
-        String result = fileReader.readString();
-        pln(result);
-    }
+	public static void main(String[] args) throws Exception {
+		String str = "http://blog.sehabcpetiny.comhttp";
+		Pattern p = Pattern.compile("^ht.*g$");
+		Matcher m = p.matcher(str);
+		System.out.println(m.matches());
+		if (m.matches()) {
+			str = m.replaceAll("jimmy");
+		}
+		System.out.println(str);
+
+	}
 }
 
