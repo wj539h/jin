@@ -2,6 +2,7 @@ package com.jin.eudic;
 
 import com.google.gson.Gson;
 import com.jin.JinLog;
+import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,16 +19,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.logging.Logger;
 
 import static com.jin.eudic.EudicConst.*;
 
 public class EudicOpt {
-	private final Logger logger = JinLog.getLogger(EudicOpt.class.getName());
-	protected Map<String, String> categoryMap = null;
+	protected final Logger logger = JinLog.getLogger(EudicOpt.class.getName());
+
+	protected Map<String, String> categoryMap;
 
 	protected boolean loadAllCatFromWeb = false;
 
@@ -37,6 +40,8 @@ public class EudicOpt {
 	public EudicOpt() {
 		//logger.setLevel(Level.SEVERE);
 	}
+
+	protected EudicOpt findSelf(){return this;}
 
 	protected void init() {
 		categoryMap = loadAllCatFromWeb ? queryAllCategory() : queryAllCatFromFile();
@@ -55,7 +60,7 @@ public class EudicOpt {
 				Map<String, List> map = gson.fromJson(json, Map.class);
 				List<Map<String, String>> list = (List) map.get("data");
 				if (list != null && list.size() != 0) {
-					result = new HashMap<String, String>();
+					result = new ConcurrentSkipListMap<String, String>();
 					for (Map<String, String> every : list) {
 						result.put(every.get("name"), every.get("id"));
 					}
@@ -84,7 +89,7 @@ public class EudicOpt {
 				List<String> l = FileUtils.readLines(f, UTF8);
 				for (String line : l) {
 					if (result == null)
-						result = new HashMap<String, String>();
+						result = new ConcurrentSkipListMap<String, String>();
 					String tempArr[] = line.split(LINE_SPLITTER);
 					result.put(tempArr[0], tempArr[1]);
 				}
@@ -101,7 +106,8 @@ public class EudicOpt {
 	protected void outToCatFile(Map<String, String> catMap) {
 		File f = new File(FILE_DIR_CAT_LIST);
 		try {
-			boolean createOrDelE = f.exists() ? f.delete() : f.createNewFile();
+			if(!f.exists())
+				f.createNewFile();
 			if (!catMap.isEmpty()) {
 				for (Map.Entry<String, String> me : catMap.entrySet()) {
 					FileUtils.write(f, me.getKey() + LINE_JOINNER + me.getValue() + CRLF, UTF8, true);
@@ -157,10 +163,6 @@ public class EudicOpt {
 
 
 
-	
-
-
-	
 
 
 
@@ -168,10 +170,33 @@ public class EudicOpt {
 
 
 
+	//将word从temp文件里面加载到List
+	protected List<String> loadWordFromFile() {
+		List<String> wordList = new LinkedList<String>();
+		File f = new File(FILE_DIR_NOTE_TEMP);
+		try {
+			if (f.exists()) {
+				List<String> list = FileUtils.readLines(f, UTF8);
+
+				String word = null;
+				for (String line : list) {
+					if (line.contains(LINE_JOINNER)) {
+						if (word != null) word = null;
+						String tempArr[] = line.split(LINE_SPLITTER);
+						word = tempArr[0];
+						wordList.add(word);
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return wordList;
+	}
 
 	//将word和note从temp文件里面加载到Map, key是word, value是note
 	protected Map<String,String> loadWordNoteFromFile() {
-		Map<String,String> resultMap = new HashMap<String,String>();
+		Map<String,String> resultMap = new ListOrderedMap<String,String>();
 		File f = new File(FILE_DIR_NOTE_TEMP);
 		try {
 			if (f.exists()) {
@@ -185,9 +210,14 @@ public class EudicOpt {
 						String tempArr[] = line.split(LINE_SPLITTER);
 						word = tempArr[0];
 						note = tempArr.length >1?tempArr[1]+ CRLF : StringUtils.EMPTY;
+						if(resultMap.containsKey(word)) { //处理temp文件里面包含重复的单词
+							String oriNote = resultMap.get(word);
+							note = oriNote + note;
+						}
 					} else {
 						note +=line+ CRLF;
-						resultMap.put(word, note);
+						if(word != null)
+							resultMap.put(word, note);
 					}
 				}
 			}
@@ -260,5 +290,8 @@ public class EudicOpt {
 	}
 	public Map<String, String> getCategoryMap() {
 		return categoryMap;
+	}
+	public void setCategoryMap(Map<String, String> categoryMap) {
+		this.categoryMap = categoryMap;
 	}
 }
