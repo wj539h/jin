@@ -10,6 +10,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 import static com.jin.eudic.EudicConst.*;
@@ -48,7 +49,7 @@ public class EudicWriteOpt extends EudicOpt {
         if (!super.categoryMap.containsKey(catName)) {
             result = "{\"msg\":\" " + catName + " 不存在\",\"result\":false}";
         } else {
-            Map<String, Object> jsonMap = new HashMap<String, Object>();
+            Map<String, Object> jsonMap = new ConcurrentSkipListMap<String, Object>();
             jsonMap.put("id", categoryMap.get(catName));
             jsonMap.put("language", "en");
             jsonMap.put("words", (List<String>) wordList);
@@ -125,7 +126,10 @@ public class EudicWriteOpt extends EudicOpt {
                         if(StringUtils.isEmpty(oriNote)) {
                             noteToImport = me.getValue();
                         } else {
-                            noteToImport = oriNote+CRLF+CRLF+me.getValue();
+                            if(oriNote.contains(catName))
+                                noteToImport = oriNote;
+                            else
+                                noteToImport = oriNote+CRLF+CRLF+me.getValue();
                         }
                         break;
                     case REPLACE:
