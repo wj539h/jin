@@ -13,13 +13,14 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.jin.eudic.EudicConst.*;
 
 public class EudicReadOpt extends EudicOpt{
     //查询cat下面所有单词和note
     public Map<String,String> findWordsAndNoteByCat(String catName) {
-        Map<String,String> resultMap = new HashMap<String,String>();
+        Map<String,String> resultMap = new ConcurrentSkipListMap<String,String>();
         if (!categoryMap.containsKey(catName)) {
             resultMap.put("msg", catName + " 不存在");
             resultMap.put("result", "false");

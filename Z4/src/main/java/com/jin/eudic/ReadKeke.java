@@ -1,20 +1,17 @@
 package com.jin.eudic;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.FileUtils;
-
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.HttpUtil;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReadKeke {
 	public void spiderWeb() {
@@ -97,8 +94,21 @@ public class ReadKeke {
 			System.out.println("--------------------------------------------------------");
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		
+		String str="123&中文";
+		String utf8="UTF-8";
+		String gbk="gbk";
+		String result = null;
+		try {
+			result = URLEncoder.encode(str, utf8);
+			System.out.println("str encode utf8 = " + result);
+			result = URLEncoder.encode(str, gbk);
+			System.out.println("str encode gbk = " + result);
+			result = URLDecoder.decode(str, gbk);
+			System.out.println("str dncode = " + result);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 }

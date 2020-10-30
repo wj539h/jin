@@ -35,7 +35,7 @@ public class MainRunner {
 		eow.addWordToCat(catName, wordList);*/
 
 		//从temp文件加载单词和note到map,然后导入到eudic里
-		String catName = "0302A";
+		String catName = "0301B";
 		eow.addWordToCateAndImportNote(catName);//, EudicConst.WriteNoteType.REPLACE
 
 		//列出单词所在的Category

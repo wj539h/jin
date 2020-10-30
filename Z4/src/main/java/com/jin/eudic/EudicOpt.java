@@ -2,6 +2,7 @@ package com.jin.eudic;
 
 import com.google.gson.Gson;
 import com.jin.JinLog;
+import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.logging.Logger;
 
 import static com.jin.eudic.EudicConst.*;
@@ -55,7 +60,7 @@ public class EudicOpt {
 				Map<String, List> map = gson.fromJson(json, Map.class);
 				List<Map<String, String>> list = (List) map.get("data");
 				if (list != null && list.size() != 0) {
-					result = new HashMap<String, String>();
+					result = new ConcurrentSkipListMap<String, String>();
 					for (Map<String, String> every : list) {
 						result.put(every.get("name"), every.get("id"));
 					}
@@ -84,7 +89,7 @@ public class EudicOpt {
 				List<String> l = FileUtils.readLines(f, UTF8);
 				for (String line : l) {
 					if (result == null)
-						result = new HashMap<String, String>();
+						result = new ConcurrentSkipListMap<String, String>();
 					String tempArr[] = line.split(LINE_SPLITTER);
 					result.put(tempArr[0], tempArr[1]);
 				}
@@ -191,7 +196,7 @@ public class EudicOpt {
 
 	//将word和note从temp文件里面加载到Map, key是word, value是note
 	protected Map<String,String> loadWordNoteFromFile() {
-		Map<String,String> resultMap = new HashMap<String,String>();
+		Map<String,String> resultMap = new ListOrderedMap<String,String>();
 		File f = new File(FILE_DIR_NOTE_TEMP);
 		try {
 			if (f.exists()) {
@@ -211,7 +216,8 @@ public class EudicOpt {
 						}
 					} else {
 						note +=line+ CRLF;
-						resultMap.put(word, note);
+						if(word != null)
+							resultMap.put(word, note);
 					}
 				}
 			}
