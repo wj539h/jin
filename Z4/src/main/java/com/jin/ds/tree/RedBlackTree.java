@@ -3,62 +3,27 @@ package com.jin.ds.tree;
 import com.jin.Const;
 
 import java.util.*;
-
+//self111
+//self222
+//self333
 public class RedBlackTree {
-
-    public static void main(String[] args) {
-        RedBlackTree rbt = new RedBlackTree();
-        rbt.add(20);rbt.add(22);rbt.add(27);rbt.add(30);rbt.add(33);
-        rbt.add(35);rbt.add(42);//rbt.add(66);rbt.add(80);rbt.add(85);
-        Const.pln(rbt.find(42));
-        //bst.del(75);
-        rbt.populateProp(rbt.root,null,1);
-        Const.pln(Const.half_sap+"traverse recursive"+Const.half_sap);
-
-        Const.p("preOrder : ");
-        rbt.traverseRecur(rbt.root, 0);Const.pln();
-        Const.p("inOrder : ");
-        rbt.traverseRecur(rbt.root, 1);Const.pln();
-        Const.p("postOrder : ");
-        rbt.traverseRecur(rbt.root, 2);Const.pln();
-
-        Const.pln(Const.full_sap);
-        /*Const.pln(half_sapa+"traverse non recursive"+half_sapa);
-        Const.p("preOrder : ");
-        bt.traverseNoRecur(bt.root, 0);Const.pln();
-        Const.p("inOrder : ");
-        bt.traverseNoRecur(bt.root, 1);Const.pln();
-        Const.p("postOrder : ");
-        bt.traverseNoRecurPost(bt.root);Const.pln();
-        Const.pln("-----------------------------------------------------------------------------");*/
-
-        Const.pln(Const.full_sap);
-        rbt.displayTree();
-        Const.pln(Const.full_sap);
-    }
-
-    public static class RBNode {
-        int d;
-        RBNode l;
-        RBNode r;
-        RBNode pa;
-        int level; //root = 1
-        int showPos; //此节点的位置
-        int firstElePos; //每行第一个元素的位置
-        int th; //当前行的第几个, l.th = pa.th*2 - 1, r.th = pa.th*2
-        byte rb = 'r';
-
-        RBNode(int d) {
-            this.d = d;
-        }
-        @Override
-        public String toString() {
-            return d+"-"+level+"-"+showPos+"-"+firstElePos+"-"+th+", ";
-        }
-    }
-
     protected RBNode root;
     protected int maxLevel;
+    private int bbc;//(bbc-bottomBlockCount)
+    private int maxDataLen;//插入每一个节点的数据长度
+    public static void main(String[] args) {
+        RedBlackTree bst = new RedBlackTree();
+        bst.add(8);bst.add(5);bst.add(15);bst.add(12);bst.add(19);
+        bst.add(9);bst.add(13);bst.add(23);bst.add(10);/*bst.add(65);
+        bst.add(74);bst.add(77);*///bt.add(78);bt.add(79);
+        //bt.add(90);bt.add(87);bt.add(93);bt.add(86);bt.add(59);
+        //bst.del(75);
+        bst.refreshProp(bst.root,null);
+
+        Const.pln(Const.full_sap);
+        bst.displayTree();
+        Const.pln(Const.full_sap);
+    }
     public void add(int d) {
         RBNode n = new RBNode(d);
         RBNode ptr;
@@ -71,6 +36,7 @@ public class RedBlackTree {
                     if(ptr.l != null) {
                         ptr = ptr.l;
                     } else {
+                        n.pa = ptr;
                         ptr.l = n;
                         break;
                     }
@@ -78,30 +44,193 @@ public class RedBlackTree {
                     if(ptr.r != null) {
                         ptr = ptr.r;
                     } else {
+                        n.pa = ptr;
                         ptr.r = n;
                         break;
                     }
                 }
             }
         }
+        fixAfterInsertion(n);
+    }
+    private void fixAfterInsertion(RBNode z) {
+        while(z.pa != null && z.pa.color=='r') { //首先还是先判断pa, 如果pa是red,才需要改变,如果是black,根本不用动
+            RBNode pa = z.pa;
+            RBNode g = z.pa.pa;
+            RBNode u = null;
+            if(g!=null) { //得到uncle
+                if(z.pa == g.l) {
+                    u = g.r;
+                } else {
+                    u = g.l;
+                }
+            }
+            if(u != null && u.color=='r') {//首先判断uncle的颜色,如果不为空而且是red,那么直接变色不用改变结构
+                pa.color = 'b';
+                u.color = 'b';
+                g.color = 'r';
+                z = g;
+            } else{ //pa是red, uncle为空(black)或black
+                RBNode pivot = null;
+                if( (z.pa == g.r && pa.l == z) || (z.pa == g.l && pa.r == z) ) { //triangle pivot = pa
+                    pivot = pa;
+                    if(pa.r == z) {
+                        //left-rotate
+                        lRotate(pivot,z, (byte) 't');
+                    } else if(pa.l == z){
+                        //right-rotate
+                        rRotate(pivot,z,(byte) 't');
+                    }
+                    z = pa; //triangle, 先旋转, 后z指向pa
+                } else if( (z.pa == g.r && pa.r == z) || (z.pa == g.l && pa.l == z) ) { //line pivot = g
+                    pivot = g;
+                    if(pa.r == z) {
+                        //left-rotate
+                        lRotate(pivot,z, (byte)'l');
+                    } else if(pa.l == z){
+                        //right-rotate
+                        rRotate(pivot,z, (byte)'l');
+                    }
+                    pa.color='b';
+                    g.color='r';
+                    z = g; //line, 先旋转, 后给pa和g变色, 最后z指向g
+                }
+            }
+        }
+        root.color = 'b';
     }
 
-    //设置RBNode的pa,th,level
-    public void populateProp(RBNode n, RBNode pa, int th) {
+    private void lRotate(RBNode pivot,RBNode z, byte shape) { //shape : l or t
+        RBNode pa = null;
+        RBNode g = null;
+        if(shape == 'l') {
+            pa = z.pa;
+            g = pivot;
+            if(g.pa!=null)  //这块也容易忘, g的pa指向需要改一下
+                if(g.pa.l==g)
+                    g.pa.l=pa;
+                else if(g.pa.r==g)
+                    g.pa.r=pa;
+
+            pa.pa = g.pa;
+            g.pa = pa;
+
+            g.r =  pa.l;
+            pa.l = g;
+        } else if (shape == 't') {
+            pa = pivot;
+            g = pivot.pa;
+
+            z.pa = pa.pa;
+
+            pa.pa = z;
+            pa.r = z.l;
+
+            z.l=pa;
+            g.l=z;//不要忘了这部
+        }
+        if(z.pa == null)
+            root = z;
+        if(pa.pa == null)
+            root = pa;
+        if(g.pa == null)
+            root = g;
+    }
+    private void rRotate(RBNode pivot,RBNode z, byte shape) { //shape : l or t
+        RBNode pa = null;
+        RBNode g = null;
+        if(shape == 'l') {
+            pa = z.pa;
+            g = pivot;
+            if(g.pa!=null)  //这块也容易忘, g的pa指向需要改一下
+                if(g.pa.l==g)
+                    g.pa.l=pa;
+                else if(g.pa.r==g)
+                    g.pa.r=pa;
+
+
+            pa.pa = g.pa;
+            g.pa = pa;
+
+            g.l =  pa.r;
+            pa.r = g;
+
+        } else if (shape == 't') {
+            pa = pivot;
+            g = pivot.pa;
+
+            z.pa = pa.pa;
+
+            pa.pa = z;
+            pa.l = z.r;
+
+            z.r=pa;
+            g.r=z;//不要忘了这部
+        }
+        if(z.pa == null)
+            root = z;
+        if(pa.pa == null)
+            root = pa;
+        if(g.pa == null)
+            root = g;
+    }
+
+    //重新计算一些通用的值
+    public void refreshProp( RBNode n,  RBNode pa) {
+        if (n == null)  return;
+
+        n.pa = pa;
+        //n.level = n.d == root.d ? (n.level + 1) : (pa.level + 1);
+        if(n.d == root.d) {
+            if(n.level==0)
+                n.level++;
+        }else{
+            n.level = pa.level + 1;
+        }
+        if (n.level > maxLevel)
+            maxLevel = n.level;
+        if(String.valueOf(n.d).length()>maxDataLen )
+            maxDataLen = String.valueOf(n.d).length();
+        refreshProp(n.l, n);
+        refreshProp(n.r, n);
+    }
+
+    //这个Map是为了displayTree方便而用的, key是level,
+    //value是一个子map, key是vNode的th,值是Node
+    Map<Integer, Map<Integer,  RBNode>> map =null;
+    private void populateMap( RBNode n) {
+        if(map == null)
+            map = new HashMap<Integer, Map<Integer,  RBNode>>();
+        Map<Integer,  RBNode> submap = map.get(Integer.valueOf(n.level));
+        if(submap == null) {
+            submap = new HashMap<Integer,  RBNode>();
+        }
+        submap.put(n.th, n);
+        map.put(Integer.valueOf(n.level),submap);
+    }
+
+    //populate二叉树所有节点的th,思想也是用
+    public void refreshTh( RBNode n, int th) {
         if (n == null) {
             return;
         }
-        n.pa = pa;
-        n.level = n.d == root.d ? (n.level + 1) : (pa.level + 1);
-        if (n.level > maxLevel) maxLevel = n.level;
-        n.th = th;
-        populateProp(n.l, n,n.th * 2 - 1);
-        populateProp(n.r, n,n.th * 2);
+        int a = 0;
+        if(th == -1) {
+            n.th = (bbc+1)/2;
+        } else{
+            n.th = th;
+        }
+        a = (int)Math.pow(2,(double)(maxLevel-n.level-1));
+        populateMap(n);
+        refreshTh(n.l, n.th-a);
+        refreshTh(n.r, n.th+a);
     }
 
+
+
     //查找
-    public RBNode find(int key) {
-        RBNode result = root;
+    public  RBNode find(int key) {
+         RBNode result = root;
         while (result != null) {
             //for(;result != null;) {
             if (result.d == key) {
@@ -117,7 +246,7 @@ public class RedBlackTree {
     }
 
     //遍历, 0先序,1中序,2后续
-    public void traverseRecur(RBNode n, int option) {
+    public void traverseRecur( RBNode n, int option) {
         if(n == null) {
             return;
         }
@@ -127,10 +256,9 @@ public class RedBlackTree {
         traverseRecur(n.r, option);
         if(option == 2) Const.p(n);
     }
-
     //先序中序非递归实现
-    public void traverseNoRecur(RBNode n, int option) {
-        Stack<RBNode> s = new Stack<>();
+    public void traverseNoRecur( RBNode n, int option) {
+        Stack< RBNode> s = new Stack<>();
         while(true) {
             if(n!=null) {
                 if(option == 0) Const.p(n);
@@ -145,8 +273,8 @@ public class RedBlackTree {
         }
     }
     //后序非递归实现
-    public void traverseNoRecurPost(RBNode n) {
-        Stack<RBNode> s = new Stack<>();
+    public void traverseNoRecurPost( RBNode n) {
+        Stack< RBNode> s = new Stack<>();
         while(true) {
             if(n!=null) {
                 s.push(n);
@@ -166,87 +294,89 @@ public class RedBlackTree {
         }
     }
 
-    //同一行上的所有RBNode,放到queue里
-    private Queue<RBNode> findRBNodesByLevel(int level) {
-        Queue<RBNode> queue = new LinkedList<RBNode>();
-        RBNode n = root;
-        Stack<RBNode> s = new Stack<>();
-        while(true) {
-            if(n !=null && n.level==level) queue.offer(n);
-            if(n!=null) {
-                s.push(n);
-                n = n.l;
-            } else {
-                n=s.pop();
-                n=n.r;
-                if(n==null && s.isEmpty()) break;
+    //每一行都放入bbc个Node, 包括space, asterisk, data
+    //比如maxLevel=4, bbc=15, 如果level是3, 那么就放入sp**spspsp33spspsp42sp**sp
+    private Queue< RBNode> fillNodesByLevel(int level) {
+        Queue< RBNode> queue = new LinkedList< RBNode>();
+
+        int firstTh = (bbc+1)/(1<<level);//这个level上第一个应该有的元素(包括***或d)的位置
+        Set<Integer> set = new HashSet<Integer>();
+        for ( int j = firstTh; j <= bbc; j += 1 << (maxLevel - (level - 1)) ) { //
+            set.add(j);
+        }
+         RBNode n = null;
+        Map<Integer,  RBNode> submap = map.get(Integer.valueOf(level));
+        for(int i=1;i<=bbc;i++) {
+            n = new  RBNode(0);
+            n.type='s';
+            if(set.contains(Integer.valueOf(i))) {
+                n.type= 'a';
             }
+            if(submap.containsKey(Integer.valueOf(i))) {
+                n = submap.get(Integer.valueOf(i));
+            }
+            queue.offer(n);
         }
         return queue;
     }
 
-    //一行中的最大位置, Max line position
-    private int calcMlp() {
-        int mln=0;
-        for (int i = 1; i<= maxLevel; i++) {
-            mln += 1 << i ;
+    //计算最底层应有的block(bbc-bottomBlockCount)
+    private int bottomBlockCount() {
+        int bbc=0;
+        for (int i = 1; i <= maxLevel; i++) {
+            bbc += 1<<(i-1);
         }
-        return mln;
+        return bbc;
     }
 
     public void displayTree() {
-        int mlp = calcMlp();
+        bbc = bottomBlockCount();
+        refreshTh(root,-1);
         List<Queue> list = new ArrayList<>();
+        maxDataLen+=3;//可以改变这个值,用以显示其他属性比如说, 30(data)--2(th
         for (int i = 1; i<= maxLevel; i++) {
-            Queue<RBNode> queue = findRBNodesByLevel(i);
-            int a = 1<<(maxLevel-i+2);
-            for (RBNode nd : queue) {
-                if(nd.pa == null) {
-                    nd.showPos = mlp/2;
-                    nd.firstElePos = nd.showPos;
-                } else {
-                    RBNode pa = nd.pa;
-                    nd.firstElePos = pa.firstElePos/2;
-                    if(nd.th==1) {
-                        nd.showPos = nd.firstElePos;
-                    } else{
-                        nd.showPos = nd.firstElePos+(nd.th-1)*a;
-                    }
-                }
+            Queue< RBNode> queue = fillNodesByLevel(i);
+            for( RBNode n : queue) {
+                if(n.type=='s')
+                    System.out.print(spaces());
+                else if(n.type=='a')
+                    System.out.print(aster());
+                else if(n.type=='d')
+                    System.out.print(paddingLen(n));
             }
-            list.add(queue);
-            Const.pln(i+" - ("+queue+")");
+            System.out.println();
         }
+    }
 
-        for (Queue<RBNode> q : list) {
-            int fep = q.peek().firstElePos;
-            int gap = 1<<(maxLevel-q.peek().level+2);
-            for(int i=1;i<fep;i++) {
-                Const.p(" ");
-            }
-            int nextElePos = fep;
-            for(int i=fep;i<=mlp;i++) {
-                if(!q.isEmpty() && q.peek().showPos==i) {
-                    Const.p(q.poll().d);
-                    nextElePos = i+gap;
-                    i++;
-                }else if(nextElePos <mlp && nextElePos ==i){
-                    Const.p("**");
-                    nextElePos = i+gap;
-                    i++;
-                }else{
-                    Const.p(" ");
-                }
-            }
-            Const.pln();
-        }
+    private String paddingLen(RBNode n) {
+        return String.valueOf(n.d)+"("+new String(new byte[]{n.color})+")";
+    }
+
+    private String paddingLen(int d) {
+        String sd = String.valueOf(d);
+        int diff = maxDataLen-sd.length();
+        for(int i=0;i<diff;i++)
+            sd="0"+sd;
+        return sd;
+    }
+    private String aster() {
+        String s = "";
+        for(int i=0;i<maxDataLen;i++)
+            s+="*";
+        return s;
+    }
+    private String spaces() {
+        String s = "";
+        for(int i=0;i<maxDataLen;i++)
+            s+=" ";
+        return s;
     }
 
     //删除节点
     public void del(int d) {
         //先查找, pa是查找到节点的父节点
-        RBNode pa = null;
-        RBNode ptr = root;
+         RBNode pa = null;
+         RBNode ptr = root;
         boolean found = false;
         while (ptr != null) {
             if(d<ptr.d) {
@@ -283,6 +413,10 @@ public class RedBlackTree {
         } else if(ptr.l != null && ptr.r != null) { //case3
             delCase3(ptr, pa);
         }
+        //删除后需要重置这些值
+        maxLevel = 0;
+        map = null;
+        refreshProp(root, null);
     }
 
     //节点的左右都有
@@ -294,12 +428,12 @@ public class RedBlackTree {
      **      33      42      **      64      72      76      85
      **  **  **  **  **  **  **  **  **  65  **  74  **  77  84  **
      */
-    private void delCase3(RBNode n, RBNode pa) {
-        RBNode succ = n.r;//先找到右边
+    private void delCase3( RBNode n,  RBNode pa) {
+         RBNode succ = n.r;//先找到右边
         if(succ.l == null) {//右边没有左,那么这个右就是succ
             succ.l = n.l;
         } else {
-            RBNode spa = null; //记录一下succ的pa
+             RBNode spa = null; //记录一下succ的pa
             while(succ.l != null) {//一直去找左,直到为空
                 spa = succ;
                 succ = succ.l;
@@ -320,6 +454,38 @@ public class RedBlackTree {
         }
         if(n.d==root.d) {//删除root节点, 让root指向一下succ
             root = succ;
+        }
+    }
+
+    //设置RBNode的pa,th,level
+    public void populateProp(RBNode n, RBNode pa, int th) {
+        if (n == null) {
+            return;
+        }
+        n.pa = pa;
+        n.level = n.d == root.d ? (n.level + 1) : (pa.level + 1);
+        if (n.level > maxLevel) maxLevel = n.level;
+        n.th = th;
+        populateProp(n.l, n,n.th * 2 - 1);
+        populateProp(n.r, n,n.th * 2);
+    }
+
+
+    private static class RBNode {
+        int d;
+        RBNode l;
+        RBNode r;
+        RBNode pa;
+        int level; //root = 1
+        int th;
+        byte type = 'd';
+        byte color = 'r';
+        RBNode(int d) {
+            this.d = d;
+        }
+        @Override
+        public String toString() {
+            return d+"-"+level+"-"+th+"-"+color+"  ";
         }
     }
 }

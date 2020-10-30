@@ -6,7 +6,10 @@ import java.util.Scanner;
  * @author jack870131
  */
 public class RedBlackBST {
-
+    public static void main(String[] args) {
+        RedBlackBST bst = new RedBlackBST();
+        bst.insertDemo();
+    }
     private final int R = 0;
     private final int B = 1;
 
