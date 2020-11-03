@@ -1,4 +1,4 @@
-package com.thread.interrupt;
+package com.jin.thread.interrupt;
 
 //例子4：再做个小测试，看看输出什么。
 public class GeneralInterrupt  implements Runnable {

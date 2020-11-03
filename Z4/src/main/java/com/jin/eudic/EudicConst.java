@@ -14,14 +14,6 @@ public class EudicConst {
 
     public static final String FILE_LOG_PROP = "CVS1/jinlog.properties";
 
-    public static final String CR = "\r";
-    public static final String LF = "\n";
-    public static final String CRLF = "\r\n";
-    public static final String UTF8 = "UTF-8";
-    public static final String LINE_JOINNER = "||";
-    public static final String LINE_SPLITTER = "\\|\\|";
-    public static final String WORD_JOINNER = "!@#";
-    public static final String HTML_BR = "<br>";
     public enum WriteNoteType {
         APPEND,REPLACE;
     }

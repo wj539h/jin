@@ -1,4 +1,4 @@
-package com.thread;
+package com.jin.thread;
 
 public class TestProducerConsumer {
 	public static void main(String[] agrs) {

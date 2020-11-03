@@ -16,10 +16,22 @@ import java.util.regex.Pattern;
 import static com.jin.eudic.EudicConst.CRLF;
 
 public class ReadKeke {
+	Map<Integer,String> catalogMap = new HashMap<Integer,String>();
+
+	public ReadKeke() {
+
+		catalogMap.put(1,"16523_10");
+		catalogMap.put(2,"16524_13");
+		catalogMap.put(3,"16525_14");
+		catalogMap.put(4,"17344_18");
+		catalogMap.put(5,"17455_8");
+		catalogMap.put(6,"17481_8");
+	}
+
 	public List<String> spiderWebLink() {
 		List<String> result = new ArrayList<String>();
 		Pattern p = Pattern.compile("http.*?daxue/.*shtml.*第?册:U[0-9]{1,2}[A|B]{0,1}");
-		for(int i=1;i<=75;i++) {
+		/*for(int i=1;i<=75;i++) {
 			String url = i==75?"http://www.kekenet.com/daxue/16522":"http://www.kekenet.com/daxue/16522/List_"+i+".shtml";
 			String r2= HttpUtil.get(url, CharsetUtil.CHARSET_UTF_8);
 			Matcher m = p.matcher(r2);
@@ -28,6 +40,28 @@ public class ReadKeke {
 			while(m.find()) {
 				s = m.start();e=m.end();
 				result.add(r2.substring(s, e)+CRLF);
+			}
+		}*/
+		String pre = "http://www.kekenet.com/daxue/";
+		Set<Integer> set = catalogMap.keySet();
+		Iterator<Integer> it = set.iterator();
+		while (it.hasNext()) {
+			Integer key = it.next();
+			String value = catalogMap.get(key);
+			String vArr[] = value.split("_");
+			for (int i = 1; i <=Integer.parseInt(vArr[1])+1 ; i++) {
+				String url = pre + vArr[0]+"/List_"+i+".shtml";
+				if(i>Integer.parseInt(vArr[1])) {
+					url = pre + vArr[0];
+				}
+				String r2= HttpUtil.get(url, CharsetUtil.CHARSET_UTF_8);
+				Matcher m = p.matcher(r2);
+				int s = 0;
+				int e = 0;
+				while(m.find()) {
+					s = m.start();e=m.end();
+					result.add(r2.substring(s, e)+CRLF);
+				}
 			}
 		}
 		//System.out.println(result);
@@ -52,6 +86,9 @@ public class ReadKeke {
 		Map<String,List<String>> map = new HashMap<String,List<String>>();
 		Pattern p = Pattern.compile("(h.*?shtml)(.*第)(.*册):(U[0-9]{1,2}[A|B]{0,1}.*target=)");
 		for (String line : l) {
+			if(line.contains("The Boy and the Bank Officer")){
+				System.out.println(line);
+			}
 			Matcher m = p.matcher(line);
 			m.find();
 			//System.out.println(m.find()+"该次查找获得匹配组的数量为：" + m.groupCount()); // 2

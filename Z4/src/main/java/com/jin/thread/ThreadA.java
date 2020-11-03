@@ -1,4 +1,4 @@
-package com.thread;
+package com.jin.thread;
 public class ThreadA {
 	public static void main(String[] args) {
 		ThreadB b = new ThreadB();// ThreadB status: new

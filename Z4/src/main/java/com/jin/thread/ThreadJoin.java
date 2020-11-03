@@ -1,4 +1,4 @@
-package com.thread;
+package com.jin.thread;
 
 public class ThreadJoin {
 	public static void main(String[] args) throws InterruptedException {

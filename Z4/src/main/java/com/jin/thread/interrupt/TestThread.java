@@ -1,11 +1,11 @@
-package com.thread.interrupt;
+package com.jin.thread.interrupt;
+//例子1：一个正在运行的线程，interrupt是不会中断的, TestThread2 是正确的做法
+public class TestThread implements Runnable {
 
-//例子2：正确的做法是
-public class TestThread2 implements Runnable {
-    boolean stop = false;
+    public boolean stop = false;
 
     public static void main(String[] args) throws Exception {
-	Thread thread = new Thread(new TestThread2(), "My Thread2");
+	Thread thread = new Thread(new TestThread(), "My Thread");
 	System.out.println("Starting thread...");
 	thread.start();
 	Thread.sleep(3000);
@@ -19,12 +19,9 @@ public class TestThread2 implements Runnable {
     public void run() {
 	while (!stop) {
 	    System.out.println("My Thread is running...");
-	    // 让该循环持续一段时间，使上面的话打印次数少点
+	    // 让该循环持续一段时间，使上面的话打印次数少点 
 	    long time = System.currentTimeMillis();
 	    while ((System.currentTimeMillis() - time < 1000)) {
-	    }
-	    if (Thread.currentThread().isInterrupted()) {
-		break;
 	    }
 	}
 	System.out.println("My Thread exiting under request...");
