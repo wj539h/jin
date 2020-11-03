@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static com.jin.eudic.EudicConst.*;
+import static com.jin.Const.*;
 
 public class EudicReadOpt extends EudicOpt{
     //查询cat下面所有单词和note

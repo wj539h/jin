@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 import static com.jin.eudic.EudicConst.*;
+import static com.jin.Const.*;
 
 public class EudicWriteOpt extends EudicOpt {
 
