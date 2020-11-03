@@ -8,9 +8,9 @@ public class EudicConst {
     public static final String URL_CUSTOMIZE_INFO = "https://dict.eudic.net/dicts/CustomizeInfo";
     public static final String URL_SET_NOTE = "https://dict.eudic.net/Dicts/SetNote";
 
-    public static final String FILE_DIR_CAT_LIST = "CVS1/eudicCatList.txt";
-    public static final String FILE_DIR_CAT_WORD_LIST = "CVS1/eudicCatWordList.txt";
-    public static final String FILE_DIR_NOTE_TEMP = "CVS1/temp";
+    public static final String FILE_DIR_CAT_LIST = "en/eudicCatList.txt";
+    public static final String FILE_DIR_CAT_WORD_LIST = "en/eudicCatWordList.txt";
+    public static final String FILE_DIR_NOTE_TEMP = "en/temp";
 
     public static final String FILE_LOG_PROP = "CVS1/jinlog.properties";
 
@@ -21,6 +21,7 @@ public class EudicConst {
     public static final String LINE_JOINNER = "||";
     public static final String LINE_SPLITTER = "\\|\\|";
     public static final String WORD_JOINNER = "!@#";
+    public static final String HTML_BR = "<br>";
     public enum WriteNoteType {
         APPEND,REPLACE;
     }

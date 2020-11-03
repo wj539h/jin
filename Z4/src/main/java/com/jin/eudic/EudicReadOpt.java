@@ -32,6 +32,7 @@ public class EudicReadOpt extends EudicOpt{
             } else {
                 for(String word : wordList) {
                     String note = findNoteByWord(word);
+                    //note=  note.replace(HTML_BR, CRLF);
                     resultMap.put(word, note);
                 }
             }
