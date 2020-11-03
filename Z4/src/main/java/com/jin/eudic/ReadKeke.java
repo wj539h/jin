@@ -3,20 +3,17 @@ package com.jin.eudic;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.HtmlUtil;
 import cn.hutool.http.HttpUtil;
-
 import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.jin.eudic.EudicConst.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.jin.eudic.EudicConst.CRLF;
 
 public class ReadKeke {
 	public List<String> spiderWebLink() {
@@ -46,7 +43,7 @@ public class ReadKeke {
 		str = HtmlUtil.filter(str);
 		str = HtmlUtil.unescape(str);
 		//System.out.println(HtmlUtil.removeHtmlTag(str,"strong"));
-		return str;
+		return str.replace("&#39;","'");
 	}
 	
 	public List<String> generateCatalog() throws IOException {
@@ -178,7 +175,7 @@ public class ReadKeke {
 				}
 			}
 			content+=text+CRLF;
-			System.out.println("---------------------------------------------------------------");
+			System.out.println(me.getKey()+"---------------------------------------------------------------");
 			FileUtils.writeStringToFile(new File("d:/rb1"), content, "utf-8", true);
 		}
 	}
