@@ -1,5 +1,5 @@
 package com.jin.eudic;
-import static com.jin.eudic.EudicConst.*;
+import static com.jin.Const.*;
 import java.util.Map;
 
 public class MainRunner {
