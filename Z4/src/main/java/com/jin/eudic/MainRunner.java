@@ -1,4 +1,6 @@
 package com.jin.eudic;
+import static com.jin.eudic.EudicConst.*;
+import java.util.Map;
 
 public class MainRunner {
 
@@ -22,11 +24,11 @@ public class MainRunner {
 		
 		
 		//查询Category里面的词和note
-		/*String catName = "0302A";
+		String catName = "0215B";
 		Map<String,String> map = eor.findWordsAndNoteByCat(catName);
 		for (Map.Entry<String, String> me : map.entrySet()) {
-			System.out.println(me.getKey()+" - "+me.getValue());
-		}*/
+			System.out.println(me.getKey()+" - "+me.getValue()+CRLF);
+		}
 		
 
 		//从temp文件加载单词list,然后导入到eudic里
@@ -35,11 +37,11 @@ public class MainRunner {
 		eow.addWordToCat(catName, wordList);*/
 
 		//从temp文件加载单词和note到map,然后导入到eudic里
-		String catName = "0301B";
+		/*String catName = "0302A";
 		eow.addWordToCateAndImportNote(catName);//, EudicConst.WriteNoteType.REPLACE
-
+		*/		
 		//列出单词所在的Category
-		//Const.pln(eo.findCatsForWord("shift"));
+		//Const.pln(eor.findCatsForWord("commitment"));
 		
 		
 		//Const.pln(eo.updateWordNote("slightly", note));

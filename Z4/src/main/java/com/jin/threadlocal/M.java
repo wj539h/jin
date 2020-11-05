@@ -1,4 +1,4 @@
-package com.threadlocal;
+package com.jin.threadlocal;
 
 import com.jin.ds.array.RandomArray;
 

@@ -1,4 +1,4 @@
-package com.thread.interrupt;
+package com.jin.thread.interrupt;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

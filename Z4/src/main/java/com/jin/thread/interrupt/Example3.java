@@ -1,4 +1,4 @@
-package com.thread.interrupt;
+package com.jin.thread.interrupt;
 
 //例子3：做个小测试吧，你是否明白了用interrupt，看看输出什么。
 public class Example3 extends Thread {
