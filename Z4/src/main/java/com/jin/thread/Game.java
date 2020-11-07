@@ -1,4 +1,4 @@
-package com.thread;
+package com.jin.thread;
 
 import java.util.Collection;
 import java.util.Collections;

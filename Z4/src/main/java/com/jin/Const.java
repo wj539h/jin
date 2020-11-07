@@ -1,35 +1,26 @@
 package com.jin;
 
-import static com.jin.eudic.EudicConst.CRLF;
-import static com.jin.eudic.EudicConst.FILE_DIR_NOTE_TEMP;
-import static com.jin.eudic.EudicConst.LINE_JOINNER;
-import static com.jin.eudic.EudicConst.UTF8;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.collections4.map.ListOrderedMap;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import cn.hutool.core.io.file.FileReader;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Const {
     public static final String full_sap = "-----------------------------------------------------------------------------";
     public static final String half_sap = "----------------------------------";
+    public static final String CR = "\r";
+    public static final String LF = "\n";
+    public static final String CRLF = "\r\n";
+    public static final String UTF8 = "UTF-8";
+    public static final String LINE_JOINNER = "||";
+    public static final String LINE_SPLITTER = "\\|\\|";
+    public static final String WORD_JOINNER = "!@#";
+    public static final String HTML_BR = "<br>";
     public static void pln(){System.out.println();}
     public static void pln(Object content){System.out.println(content);}
     public static void p(Object content){System.out.print(content);}
-    public static final String CR = "\r";
-    public static final String LF = "\n";
-    public static final String LINE_JOINNER = "||";
     public static void main(String[] args) {
+        System.out.println(new Const().getClass().getClassLoader());
+        System.out.println(new HashMap<>());
+        System.out.println(new ConcurrentHashMap<>());
     }
 }
 

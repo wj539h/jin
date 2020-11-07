@@ -1,4 +1,4 @@
-package com.thread;
+package com.jin.thread;
 
 public class DeadLock {
     public static final Integer forA = new Integer(0);

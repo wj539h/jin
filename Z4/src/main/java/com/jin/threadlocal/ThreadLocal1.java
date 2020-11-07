@@ -1,4 +1,4 @@
-package com.threadlocal;
+package com.jin.threadlocal;
 
 public class ThreadLocal1 {
 	public static void main(String[] args) {
