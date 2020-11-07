@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.logging.Logger;
 
 import static com.jin.eudic.EudicConst.*;
+import static com.jin.Const.*;
 
 public class EudicOpt {
 	protected final Logger logger = JinLog.getLogger(EudicOpt.class.getName());

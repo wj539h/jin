@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.jin.eudic.EudicConst.CRLF;
+import static com.jin.Const.*;
 
 public class ReadKeke {
 	Map<Integer,String> catalogMap = new HashMap<Integer,String>();
