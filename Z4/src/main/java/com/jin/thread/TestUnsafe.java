@@ -31,9 +31,9 @@ public class TestUnsafe implements Runnable{
         }
     }
     public void run() {
-        //calc();
+        calc();
         //calcAto();
-        calcUnsafe();
+        //calcUnsafe();
     }
 
     public void calcAto() {
@@ -44,8 +44,7 @@ public class TestUnsafe implements Runnable{
 
     public void calc() {
         for (int i = 0; i < count; i++) {
-            pln(tName()+" -- "+(p.i));
-            p.i++;
+            pln(tName()+" -- "+(p.i++));
         }
     }
 
@@ -70,7 +69,7 @@ public class TestUnsafe implements Runnable{
     }
 
     private static class Person {
-        public int i;
+        volatile public int i;
         public AtomicInteger ai = new AtomicInteger(0);
     }
 }
