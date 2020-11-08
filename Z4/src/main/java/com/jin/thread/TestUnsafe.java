@@ -7,9 +7,7 @@ import static com.jin.Const.tName;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,7 +15,6 @@ import sun.misc.Unsafe;
 public class TestUnsafe implements Runnable{
     public Person p;
     private int count = 100000;
-    private Set<Integer> set = new HashSet<Integer>();
     private List<Integer> list = new ArrayList<Integer>();
     private Vector<Integer> cv = new Vector<Integer>();
     public static Unsafe UNSAFE = null;
