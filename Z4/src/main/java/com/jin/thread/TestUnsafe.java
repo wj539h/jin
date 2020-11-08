@@ -1,13 +1,25 @@
 package com.jin.thread;
-import sun.misc.Unsafe;
+
+import static com.jin.Const.getDuplicateElements;
+import static com.jin.Const.pln;
+import static com.jin.Const.tJoin;
+import static com.jin.Const.tName;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.jin.Const.*;
+import sun.misc.Unsafe;
 public class TestUnsafe implements Runnable{
     public Person p;
     private int count = 100000;
+    private Set<Integer> set = new HashSet<Integer>();
+    private List<Integer> list = new ArrayList<Integer>();
+    private Vector<Integer> cv = new Vector<Integer>();
     public static Unsafe UNSAFE = null;
     public static long OFFSET;
     static {
@@ -31,20 +43,24 @@ public class TestUnsafe implements Runnable{
         }
     }
     public void run() {
-        calc();
-        //calcAto();
+        //calc();
+        calcAto();
         //calcUnsafe();
     }
 
     public void calcAto() {
         for (int i = 0; i < count; i++) {
-            pln(tName()+" -- "+(p.ai.getAndIncrement()));
+        	int c = p.ai.incrementAndGet();
+            pln(tName()+" -- "+(c));
+            list.add(c);
         }
     }
-
+    
     public void calc() {
         for (int i = 0; i < count; i++) {
-            pln(tName()+" -- "+(p.i++));
+        	int c = ++p.i;
+            pln(tName()+" -- "+(c));
+            list.add(c);
         }
     }
 
@@ -58,18 +74,23 @@ public class TestUnsafe implements Runnable{
             }
         }
     }
-
+    
     public static void main(String[] args) {
         TestUnsafe tu = new TestUnsafe();
         Person p=new Person();
         tu.p = p;
-        for(int i=0;i<2;i++) {
-            new Thread(tu).start();
-        }
+        Thread t1 = new Thread(tu);
+        Thread t2 = new Thread(tu);
+        t1.start();
+        t2.start();
+        tJoin(t1);
+        tJoin(t2);
+        pln(tu.list.size()+"------------");
+        pln(getDuplicateElements(tu.list));
     }
 
     private static class Person {
-        volatile public int i;
+        /*volatile*/ public int i;
         public AtomicInteger ai = new AtomicInteger(0);
     }
 }

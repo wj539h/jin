@@ -1,9 +1,10 @@
 package com.jin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class Const {
     public static final String full_sap = "-----------------------------------------------------------------------------";
@@ -34,27 +35,38 @@ public class Const {
     public static void tJoin(Thread t) {
         try {t.join();} catch (InterruptedException e) {e.printStackTrace();}
     }
+    public static <E> List<E> getDuplicateElements(List<E> list) {
+		return list.stream() // list 对应的 Stream
+				.collect(Collectors.toMap(e -> e, e -> 1, (a, b) -> a + b)) // 获得元素出现频率的 Map，键为元素，值为元素出现的次数
+				.entrySet().stream() // 所有 entry 对应的 Stream
+				.filter(entry -> entry.getValue() > 1) // 过滤出元素出现次数大于 1 的 entry
+				.map(entry -> entry.getKey()) // 获得 entry 的键（重复元素）对应的 Stream
+				.collect(Collectors.toList());  // 转化为 List
+	}
     public static void main(String[] args) {
         /*System.out.println(new Const().getClass().getClassLoader());
 	System.out.println(new HashMap<>());
 	System.out.println(new ConcurrentHashMap<>());*/
-        ConcurrentHashMap map = new ConcurrentHashMap();
-        map.put(1, "1");
-        map.put(17, "170");
-        map.put(33, "330");
-        map.put(49, "490");
-        map.put(65, "650");
-        map.put(81, "810");
-        map.put(97, "970");
-        map.put(113, "1130");
-        map.put(129, "1290");//当添加到这个元素的时候进行扩容
-        map.put(145, "1450");
-        map.put(161, "1610");
-        map.put(177, "1770");
-        map.put(193, "1930");
-        map.put(209, "2090");
-        map.put(241, "2410");
-        map.put(257, "2570");
+    	HashMap hmap = new HashMap();
+        ConcurrentHashMap cmap = new ConcurrentHashMap();
+        hmap.put(1, "1");
+        cmap.put(17, "170");
+        cmap.put(33, "330");
+        cmap.put(49, "490");
+        cmap.put(65, "650");
+        cmap.put(81, "810");
+        cmap.put(97, "970");
+        cmap.put(113, "1130");
+        cmap.put(129, "1290");//当添加到这个元素的时候进行扩容
+        cmap.put(145, "1450");
+        cmap.put(161, "1610");
+        cmap.put(177, "1770");
+        cmap.put(193, "1930");
+        cmap.put(209, "2090");
+        cmap.put(241, "2410");
+        cmap.put(257, "2570");
+        float i = 0.75f;
+        System.out.println(i*2);
     }
 
 
