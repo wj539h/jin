@@ -2,24 +2,17 @@ package com.jin.thread.juc;
 
 import java.util.concurrent.locks.ReentrantLock;
 import static com.jin.Const.*;
-public class TestReentrantLock implements Runnable {
+public class TestReentrantLock {
     ReentrantLock rtLock = new ReentrantLock(true);
     static Thread t1;
     static Thread t2;
     static Thread t3;
+
     public static void main(String[] args) {
         Person p = new Person();
         t1 = new Thread(p, "t1");t1.start();
         t2 = new Thread(p, "t2");t2.start();
         t3 = new Thread(p, "t3");t3.start();
-    }
-
-    public void run() {
-        String tName = tName();
-        rtLock.lock();
-        sleep(5000);
-        pln(tName);
-        rtLock.unlock();
     }
 
     public static class Person implements Runnable {
@@ -29,7 +22,6 @@ public class TestReentrantLock implements Runnable {
             while(true) {
                 addAge();
             }
-
         }
         private void addAge() {
             try {
@@ -50,9 +42,7 @@ public class TestReentrantLock implements Runnable {
                     if(rtLock.getHoldCount() == 0)
                         break;
                 }
-
             }
-
         }
         private void p(String mName) {
             pln(mName+" "+tName()+" --- "+age+"HoldCount : "+rtLock.getHoldCount()+"    QueueLength : "+rtLock.getQueueLength());
