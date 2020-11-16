@@ -1,4 +1,4 @@
-package com.jin.thread;
+package com.jin.thread.juc;
 
 import static com.jin.Const.getDuplicateElements;
 import static com.jin.Const.pln;

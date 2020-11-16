@@ -1,4 +1,4 @@
-package com.jin.thread;
+package com.jin.thread.juc;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

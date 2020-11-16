@@ -30,6 +30,9 @@ public class Const {
     public static void sleep(long millisec){
         try {TimeUnit.MILLISECONDS.sleep(millisec); } catch (InterruptedException e) {e.printStackTrace();}
     }
+    public static void sleepThrow(long millisec) throws InterruptedException{
+    	TimeUnit.MILLISECONDS.sleep(millisec);
+    }
     public static String tName() {
         return Thread.currentThread().getName();
     }
