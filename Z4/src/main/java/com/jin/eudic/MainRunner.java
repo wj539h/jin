@@ -24,7 +24,7 @@ public class MainRunner {
 		
 		
 		//查询Category里面的词和note
-		String catName = "0215B";
+		String catName = "0205A";
 		Map<String,String> map = eor.findWordsAndNoteByCat(catName);
 		for (Map.Entry<String, String> me : map.entrySet()) {
 			System.out.println(me.getKey()+" - "+me.getValue()+CRLF);

@@ -51,7 +51,7 @@ public class Const {
         /*System.out.println(new Const().getClass().getClassLoader());
 	System.out.println(new HashMap<>());
 	System.out.println(new ConcurrentHashMap<>());*/
-		/*HashMap hmap = new HashMap();
+		HashMap hmap = new HashMap();
 		ConcurrentHashMap cmap = new ConcurrentHashMap();
 		hmap.put(1, "1");
 		cmap.put(17, "170");
@@ -68,7 +68,7 @@ public class Const {
 		cmap.put(193, "1930");
 		cmap.put(209, "2090");
 		cmap.put(241, "2410");
-		cmap.put(257, "2570");*/
+		cmap.put(257, "2570");
     }
 }
 

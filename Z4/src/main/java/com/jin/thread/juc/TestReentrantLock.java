@@ -25,8 +25,8 @@ public class TestReentrantLock {
         }
         private void addAge() {
             try {
-                //rtLock.lock();
-                rtLock.lockInterruptibly();
+                rtLock.lock();
+                //rtLock.lockInterruptibly();
                 age++;
                 p("addAge");
             } catch (Exception e) {

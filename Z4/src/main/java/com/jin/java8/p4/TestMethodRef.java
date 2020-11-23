@@ -40,69 +40,69 @@ public class TestMethodRef {
     //对象::实例方法名
     @Test
     public void test1() {
-	PrintStream ps1 = System.out;
-	Consumer<String> con = (x) -> ps1.println(x);//生成了一个实现了Consumer接口的类的对象
+        PrintStream ps1 = System.out;
+        Consumer<String> con = (x) -> ps1.println(x);//生成了一个实现了Consumer接口的类的对象
 
-	PrintStream ps = System.out;
-	Consumer<String> con1 = ps::println;//相当于上面，引用了ps对象的println()方法
+        PrintStream ps = System.out;
+        Consumer<String> con1 = ps::println;//相当于上面，引用了ps对象的println()方法
 
-	Consumer<String> con2 = System.out::println;
-	con2.accept("abcdef");
+        Consumer<String> con2 = System.out::println;
+        con2.accept("abcdef");
     }
-    
+
     @Test
-    public void test2(){
-        final Employee emp=new Employee();
-        Supplier<String> sup=()->emp.getName();//代替匿名内部类
-        String str=sup.get();
+    public void test2() {
+        final Employee emp = new Employee();
+        Supplier<String> sup = () -> emp.getName();//代替匿名内部类
+        String str = sup.get();
         System.out.println(str);
 
-        Supplier<Integer> sup2=emp::getAge;
-        Integer num=sup2.get();
+        Supplier<Integer> sup2 = emp::getAge;
+        Integer num = sup2.get();
         System.out.println(num);
     }
-    
-  //类::静态方法名
+
+    //类::静态方法名
     @Test
-    public void test3(){
-        Comparator<Integer> com=(x,y)->Integer.compare(x,y);
-        Comparator<Integer> com1=Integer::compare;
+    public void test3() {
+        Comparator<Integer> com = (x, y) -> Integer.compare(x, y);
+        Comparator<Integer> com1 = Integer::compare;
     }
 
     //类::实例方法名
     @Test
-    public void test4(){
-        BiPredicate<String,String> bp=(x,y)->x.equals(y);
-        BiPredicate<String, String> bp2=String::equals;
+    public void test4() {
+        BiPredicate<String, String> bp = (x, y) -> x.equals(y);
+        BiPredicate<String, String> bp2 = String::equals;
     }
 
 
     //构造器引用
     @Test
-    public void test5(){
-        Supplier<Employee> sup=()->new Employee();
+    public void test5() {
+        Supplier<Employee> sup = () -> new Employee();
 
         //构造器引用方式
-        Supplier<Employee> sup2=Employee::new;//使用无参构造器
-        Employee emp=sup2.get();
+        Supplier<Employee> sup2 = Employee::new;//使用无参构造器
+        Employee emp = sup2.get();
         System.out.println(emp);
 
-        Function<Integer,Employee> fun2=(x)->new Employee(x);
-        Employee emp2=fun2.apply(101);
+        Function<Integer, Employee> fun2 = (x) -> new Employee(x);
+        Employee emp2 = fun2.apply(101);
         System.out.println(emp2);
 
-        BiFunction<String,Integer,Employee> bf=Employee::new;
+        BiFunction<String, Integer, Employee> bf = Employee::new;
     }
 
     //数组引用
     @Test
-    public void test6(){
-        Function<Integer,String[]> fun=(x)->new String[x];
-        String[] strs=fun.apply(10);
+    public void test6() {
+        Function<Integer, String[]> fun = (x) -> new String[x];
+        String[] strs = fun.apply(10);
         System.out.println(strs.length);
 
-        Function<Integer,String[]> fun2=String[]::new;
-        String[] str2=fun2.apply(20);
+        Function<Integer, String[]> fun2 = String[]::new;
+        String[] str2 = fun2.apply(20);
         System.out.println(str2.length);
     }
 }
